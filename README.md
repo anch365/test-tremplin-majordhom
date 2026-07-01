@@ -1,44 +1,36 @@
-# Test dev web Tremplin
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Rendu
+## Getting Started
 
-<span style="color:red">**Rendez le projet sur GitHub, en dépôt public, et envoyez le lien à [production@majordhom.fr](mailto:production@majordhom.fr).  
-Tout autre format (zip, wetransfer, etc.) ne sera pas pris en compte.**</span>
+First, run the development server:
 
-Le `README.md` de votre projet doit comprendre :
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- Un court résumé sur vous :
-    - Nom / prénom
-    - Niveau d’étude / formation en cours
-    - Durée de stage souhaitée
-    - Lien vers vos profils (GitHub, LinkedIn, portfolio, …) s’il y en a
-- Des **screenshots** de la page principale réalisée
-- Une section **“Stack technique & choix”** :
-    - Framework utilisé (React ou Next.js, version)
-    - Outils et librairies principales utilisées (UI, dates, formulaires, etc.) avec 1 phrase pour expliquer chaque choix
-- Une section **“Lancement du projet”**
-- Une section **“Questions”** (réponse en quelques phrases suffit) :
-    - Avez-vous trouvé l’exercice facile ou difficile ? Qu’est-ce qui vous a posé problème ?
-    - Avez-vous appris de nouveaux outils pour répondre à l’exercice ? Si oui, lesquels ?
-    - Quelle est la place du développement web dans votre cursus de formation ?
-    - Avez-vous utilisé un LLM ? Si oui, comment intégrez vous les LLM à chaque étape de votre workflow ? 
----
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Exercice
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-> *Limite de temps: 2 jours*
-> 
-> Vous devez utiliser **React ou Next.js** pour ce test.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Learn More
 
-![alt text](./maquette.png)
+To learn more about Next.js, take a look at the following resources:
 
-Vous devez intégrer une maquette de page de formulaire pour le site web de l’agence, et enregistrer les données du formulaire dans une base de données. La maquette est simpliste, à vous de voir comment répondre.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-L’objectif est de voir :
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-- Votre capacité à intégrer une maquette **avec minutie**
-- Votre maîtrise d’un **framework front JavaScript moderne : React ou Next.js**
-- Votre compréhension des besoins d'un formulaire web.
+## Deploy on Vercel
 
-Bonne chance !
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
