@@ -35,7 +35,7 @@ const HEURES = [
   "19h",
   "20h",
 ];
-const MINUTES = ["00", "15", "30", "45"];
+const MINUTES = ["0m", "10m", "15m", "20m", "25m", "30m", "35m", "40m", "45m"];
 
 export default function ContactForm() {
   const [civilite, setCivilite] = useState<"Mme" | "M">("Mme");
@@ -54,7 +54,8 @@ export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<ActionResult | null>(null);
 
-  const ajouterDisponibilite = () => {
+  const ajouterDisponibilite = (e: React.MouseEvent) => {
+    e.preventDefault(); // ← Ajoute ça !!! Empêche tout comportement par défaut
     setDisponibilites((prev) => [
       ...prev,
       {
@@ -99,7 +100,7 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-5xl items-center">
+    <form onSubmit={handleSubmit} className="w-full max-w-5xl items-start">
       {/* Message de résultat */}
       {result && (
         <div
@@ -113,11 +114,11 @@ export default function ContactForm() {
         </div>
       )}
 
-      {/* LIGNE : 2 colonnes sur desktop, 1 colonne sur mobile */}
-      <div className="flex flex-col mb-8 gap-6 lg:flex-row">
-        
+      <section className="flex flex-col mb-8 gap-6 lg:flex-row">
+
         {/* ===== COLONNE GAUCHE : VOS COORDONNÉES ===== */}
-        <div className="flex flex-col gap-4 text-white shadow-sm p-8 lg:1/2">
+
+        <section className="flex flex-col gap-8 text-white shadow-sm p-8 lg:3/5">
           <h2 className="text-lg  font-bold sm:text-xl">VOS COORDONNÉES</h2>
 
           {/* Civilité : Mme / M côte à côte */}
@@ -147,61 +148,63 @@ export default function ContactForm() {
           </div>
 
           {/* Nom et Prénom côte à côte sur desktop */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-4 text-gray-600">
-            <div className="flex-1">
+          <div>
+            <div className="flex flex-col gap-4 mb-4 text-gray-600 sm:flex-row ">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  placeholder="Nom"
+                  required
+                  className="w-full px-8 py-3 border border-gray-200 rounded-full focus:ring-2 focus:border-transparent outline-none bg-white"
+                />
+              </div>
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={prenom}
+                  onChange={(e) => setPrenom(e.target.value)}
+                  placeholder="Prénom"
+                  required
+                  className="w-full px-8 py-3 border border-gray-200 rounded-full focus:ring-2 focus:border-transparent outline-none bg-white"
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="mb-4 text-gray-600">
               <input
-                type="text"
-                value={nom}
-                onChange={(e) => setNom(e.target.value)}
-                placeholder="Nom"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Adresse mail"
                 required
-                className="w-full px-4 py-3 border border-gray-200 rounded-full focus:ring-2 focus:border-transparent outline-none bg-white"
+                className="w-full px-8 py-3 border border-gray-200 rounded-full focus:ring-2 bg-white"
               />
             </div>
-            <div className="flex-1">
+
+            {/* Téléphone */}
+            <div className="mb-4 text-gray-600">
               <input
-                type="text"
-                value={prenom}
-                onChange={(e) => setPrenom(e.target.value)}
-                placeholder="Prénom"
-                required
-                className="w-full px-4 py-3 border border-gray-200 rounded-full focus:ring-2 focus:border-transparent outline-none bg-white"
+                type="tel"
+                value={telephone}
+                onChange={(e) => setTelephone(e.target.value)}
+                placeholder="Téléphone"
+                className="w-full px-8 py-3 border border-gray-200 rounded-full focus:ring-2 bg-white"
               />
             </div>
           </div>
-
-          {/* Email */}
-          <div className="mb-4 text-gray-600">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Adresse mail"
-              required
-              className="w-full px-4 py-3 border border-gray-200 rounded-full focus:ring-2 bg-white"
-            />
-          </div>
-
-          {/* Téléphone */}
-          <div className="mb-4 text-gray-600">
-            <input
-              type="tel"
-              value={telephone}
-              onChange={(e) => setTelephone(e.target.value)}
-              placeholder="Téléphone"
-              className="w-full px-4 py-3 border border-gray-200 rounded-full focus:ring-2 bg-white"
-            />
-          </div>
-        </div>
+        </section>
 
         {/* ===== COLONNE DROITE : VOTRE MESSAGE ===== */}
-        <div className="text-white rounded-xl shadow-sm p-8 lg:p-5 lg:w-1/2">
+        <section className="text-white rounded-xl shadow-sm p-8 lg:p-5 lg:w-4/5">
           <h2 className="text-lg sm:text-xl font-bold text-white mb-6">
             VOTRE MESSAGE
           </h2>
 
           {/* Options en radio buttons */}
-          <div className="gap-3 mb-5 lg:flex lg:flex-wrap">
+          <div className="gap-3 mb-5 font-thin lg:flex lg:flex-row">
             <label className="flex items-center gap-3 p-3 rounded-full ">
               <input
                 type="radio"
@@ -245,10 +248,10 @@ export default function ContactForm() {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Votre message"
             rows={6}
-            className="w-full px-4 py-3 border border-gray-200 rounded-4xl focus:ring-2 focus:border-transparent outline-none bg-white resize-none text-gray-600"
+            className="w-full px-8 py-3 border border-gray-200 rounded-4xl focus:ring-2 focus:border-transparent outline-none bg-white resize-none text-gray-600"
           />
-        </div>
-      </div>
+        </section>
+      </section>
 
       {/* ===== DISPONIBILITÉS POUR UNE VISITE ===== */}
       {option === "visite" && (
@@ -257,16 +260,15 @@ export default function ContactForm() {
             DISPONIBILITÉS POUR UNE VISITE
           </h2>
 
-          {/* Sélecteurs : empilés sur mobile, en ligne sur desktop */}
-          <div className="flex flex-col items-stretch sm:items-end gap-3 mb-5 sm:gap-4 sm:flex-row">
+          <div className="flex flex-col items-stretch gap-3 mb-5 sm:gap-4 sm:flex-row sm:items-end">
             <div className="flex-1 sm:flex-none">
-              <label className="block text-xs text-gray-500 mb-1 sm:hidden">
+              <label className="block text-xs text-gray-200 mb-1 sm:hidden">
                 Jour
               </label>
               <select
                 value={jourDispo}
                 onChange={(e) => setJourDispo(e.target.value)}
-                className="w-full sm:w-auto px-4 py-3 border border-gray-200 rounded-full bg-white outline-none focus:ring-2 text-gray-600"
+                className="w-full sm:w-auto px-8 py-3 border border-gray-200 rounded-full bg-white outline-none focus:ring-2 text-gray-600"
               >
                 {JOURS.map((j) => (
                   <option key={j} value={j}>
@@ -277,7 +279,7 @@ export default function ContactForm() {
             </div>
 
             <div className="flex-1 sm:flex-none">
-              <label className="block text-xs text-gray-500 mb-1 sm:hidden">
+              <label className="block text-xs text-gray-200 mb-1 sm:hidden">
                 Heure
               </label>
               <select
@@ -294,7 +296,7 @@ export default function ContactForm() {
             </div>
 
             <div className="flex-1 sm:flex-none">
-              <label className="block text-xs text-gray-500 mb-1 sm:hidden">
+              <label className="block text-xs text-gray-200 mb-1 sm:hidden">
                 Minutes
               </label>
               <select
@@ -310,12 +312,20 @@ export default function ContactForm() {
               </select>
             </div>
 
-            <button
-              type="button"
+            {/* AJOUTER DISPO */}
+            <span
               onClick={ajouterDisponibilite}
-              className="w-full sm:w-auto px-6 py-3 bg-purple-800 text-white font-semibold rounded-full"
+              className="cursor-pointer w-full sm:w-auto px-6 py-3 bg-purple-800 hover:bg-purple-600 text-white font-semibold rounded-full inline-block text-center"
             >
               AJOUTER DISPO
+            </span>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="cursor-pointer w-full sm:w-auto px-10 py-3 bg-orange-400 text-white font-bold rounded-full hover:bg-orange-600 transition-colors disabled:opacity-50 shadow-lg text-center"
+            >
+              {isSubmitting ? "Envoi..." : "ENVOYER"}
             </button>
           </div>
 
@@ -325,14 +335,14 @@ export default function ContactForm() {
               {disponibilites.map((d) => (
                 <span
                   key={d.id}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-orange-50 text-orange-700 rounded-full text-sm"
+                  className="inline-flex items-center gap-16 px-4 py-2 bg-white/80 text-gray-600 rounded-full text-sm"
                 >
                   {d.jour} à {d.heure}
                   {d.minutes}
                   <button
                     type="button"
                     onClick={() => supprimerDisponibilite(d.id)}
-                    className="w-4 h-4 bg-orange-200 text-orange-600 rounded-full flex items-center justify-center text-xs hover:bg-orange-300"
+                    className="w-4 h-4 flex items-center justify-center text-xs font-extrabold"
                   >
                     ✕
                   </button>
@@ -342,17 +352,6 @@ export default function ContactForm() {
           )}
         </div>
       )}
-
-      {/* ===== BOUTON ENVOYER ===== */}
-      <div className="flex justify-center sm:justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full px-16 py-3 bg-orange-500 text-white font-bold text-base  rounded-full hover:bg-orange-600 transition-colors disabled:opacity-50 shadow-lg sm:w-auto sm:px-14 sm:text-lg"
-        >
-          {isSubmitting ? "Envoi..." : "ENVOYER"}
-        </button>
-      </div>
     </form>
   );
 }
