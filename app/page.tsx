@@ -2,28 +2,24 @@ import ContactForm from "@/components/ContactForm";
 
 export default function Home() {
   return (
-    <main className="min-h-screen relative">
-      {/* Image de fond floutée */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <img
-          src="./salon.png"
-          alt="Une image de fond d'un salon chaleureux"
-          className="w-full h-full object-cover"
-        />
-
-        {/* Voile noir pour la lisibilité */}
-        <div className="absolute inset-0 bg-black/50" />
-      </div>
-
-      <div className="flex flex-col items-start py-10 px-4 lg:py-6">
-        <div className="w-full max-w-6xl mx-auto">
-          <h1 className="text-xl font-bold text-white px-8 drop-shadow-lg lg:text-4xl">
+    <main className="min-h-screen flex py-16 md:px-8 lg:px-16">
+      {/* image de fond floutée */}
+      <section
+        className=" justify-center  w-full md:rounded-4xl"
+        style={{
+          backgroundImage: "url('/salon.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* div filtre noir transparent sur l'image */}
+        <div className="h-full w-full bg-black/55 flex flex-col gap-8  overflow-hidden px-4 py-8 md:rounded-4xl xl:px-16 xl:py-8">
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg ">
             CONTACTEZ L&apos;AGENCE
           </h1>
-
           <ContactForm />
         </div>
-      </div>
+      </section>
     </main>
   );
 }

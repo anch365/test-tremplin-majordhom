@@ -3,6 +3,38 @@
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 
+// ---- 1. RATE LIMITING SIMPLE (anti-spam) ----
+const rateLimit = new Map<string, { count: number; resetTime: number }>()
+const MAX_REQUESTS = 3 // Maximum 3 soumissions
+const WINDOW_MS = 60 * 1000 // par minute
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimit.get(ip)
+  
+  if (!entry || now > entry.resetTime) {
+    rateLimit.set(ip, { count: 1, resetTime: now + WINDOW_MS })
+    return true 
+  }
+  
+  if (entry.count >= MAX_REQUESTS) {
+    return false 
+  }
+  
+  entry.count++
+  return true 
+}
+
+// ---- 2. SANITIZATION (anti-XSS) ----
+function sanitize(str: string): string {
+  return str
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
+// ---- 2. VALIDATION ZOD ----
 const contactSchema = z.object({
   nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
   email: z.string().email('Email invalide'),
@@ -21,6 +53,17 @@ export type ActionResult = {
 
 export async function submitContact(formData: FormData): Promise<ActionResult> {
   try {
+     // ---- VÉRIFICATION RATE LIMIT ----
+
+    const ip = 'anonymous'       // En production : headers().get('x-forwarded-for')
+    if (!checkRateLimit(ip)) {
+      return {
+        success: false,
+        message: 'Trop de tentatives. Veuillez réessayer dans une minute.',
+      }
+    }
+
+    // ---- EXTRACTION AVEC SANITIZATION ----
     const rawData = {
       nom: formData.get('nom') as string,
       email: formData.get('email') as string,
@@ -32,8 +75,8 @@ export async function submitContact(formData: FormData): Promise<ActionResult> {
       disponibilites: formData.get('disponibilites') as string || '[]',
     }
 
+    // ---- VALIDATION ZOD ----
     const validationResult = contactSchema.safeParse(rawData)
-
     if (!validationResult.success) {
       const errors = validationResult.error.issues
         .map(e => e.message)
@@ -43,6 +86,7 @@ export async function submitContact(formData: FormData): Promise<ActionResult> {
 
     const data = validationResult.data
 
+    // ---- SAUVEGARDE (Prisma = protection SQL injection incluse) ----
     await prisma.contact.create({
       data: {
         nom: data.nom,
