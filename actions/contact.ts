@@ -105,10 +105,12 @@ export async function submitContact(formData: FormData): Promise<ActionResult> {
       message: 'Message envoyé avec succès ! Nous vous recontacterons rapidement.',
     }
   } catch (error) {
-    console.error('Erreur:', error)
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error('Erreur complète:', errorMessage)
+    console.error('Stack:', error instanceof Error ? error.stack : 'N/A')
     return {
       success: false,
-      message: 'Une erreur est survenue. Veuillez réessayer.',
+      message: `Une erreur est survenue: ${errorMessage}`,
     }
   }
 }
