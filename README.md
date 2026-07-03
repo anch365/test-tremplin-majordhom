@@ -23,13 +23,11 @@ Formulaire de contact interactif pour l'agence Majordhom, développé avec **Nex
 
 ![Page d'accueil](./capture-readme/page-principale.png)
 
-
-
 ### Formulaire rempli
 
-### Desktop
+#### Desktop
 
-![Formulaire rempli](./capture-readme/form-rempli.png)
+![Formulaire rempli](./capture-readme/Form-rempli.png)
 
 #### Mobile
 
